@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Regular">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="RegularBold">
+        <item name="android:textColor">@color/textColor</item>
+    </style>
+
+    <style name="Regular14" parent="Regular">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="RegularBold14" parent="RegularBold">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Regular16" parent="Regular">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <style name="RegularBold16" parent="RegularBold">
+        <item name="android:textSize">16sp</item>
+    </style>
+
+</resources>

@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
+import ch.comparis.challenge.adapter.CarsAdapter
 import ch.comparis.challenge.databinding.FragmentMainBinding
 import ch.comparis.challenge.model.CarsViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
@@ -13,12 +15,14 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class MainFragment : Fragment() {
     private val viewModel: CarsViewModel by sharedViewModel()
     private var binding: FragmentMainBinding? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         val fragmentBinding = FragmentMainBinding.inflate(layoutInflater, container, false)
         binding = fragmentBinding
+        setupCarsRecycleView()
         return fragmentBinding.root
     }
 
@@ -42,6 +46,16 @@ class MainFragment : Fragment() {
             Toast.makeText(requireContext(), "Count ${it[0].make}", Toast.LENGTH_SHORT).show()
         }
     }
+    private fun setupCarsRecycleView() {
+        val carsAdapter = CarsAdapter()
+        binding!!.carsRecycleView.let { recyclerView ->
+                with(recyclerView) {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    adapter = carsAdapter
+                }
+            }
+        }
+
 
     override fun onDestroy() {
         super.onDestroy()
