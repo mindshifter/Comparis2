@@ -1,65 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
 
         <ImageView
             android:id="@+id/carAvatar"
-            android:layout_width="132dp"
-            android:layout_height="132dp"
-            android:layout_margin="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
             android:scaleType="centerInside"
             tools:src="@drawable/ic_baseline_directions_car_24" />
 
+        <include layout="@layout/separator_horizontal" />
+
         <LinearLayout
-            android:id="@+id/carDetails"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_gravity="center_vertical"
-            android:paddingHorizontal="16dp"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/carMake"
-                style="@style/RegularBold16"
+            <LinearLayout
+                android:id="@+id/carDetails"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/carMake"
+                    style="@style/RegularBold16"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    app:drawableLeftCompat="@drawable/ic_baseline_directions_car_24"
+                    tools:text="Audi" />
+
+                <TextView
+                    android:id="@+id/carMileage"
+                    style="@style/Regular14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawablePadding="8dp"
+                    app:drawableLeftCompat="@drawable/ic_baseline_timeline_24"
+                    tools:text="18000 km" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/isFavoriteButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                tools:text="Audi" />
-
-            <TextView
-                android:id="@+id/carMileage"
-                style="@style/Regular14"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="18000" />
-
+                android:layout_gravity="center"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:src="@drawable/ic_baseline_favorite_border_24" />
         </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/isFavoriteButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:padding="16dp"
-            android:src="@drawable/ic_baseline_favorite_border_24" />
 
+    </LinearLayout>
 
-        </LinearLayout>
-
-    <include layout="@layout/separator_horizontal" />
-
-</LinearLayout>
+</com.google.android.material.card.MaterialCardView>
 
 
 

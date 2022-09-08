@@ -6,9 +6,46 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/selectedMakes"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="Filters"
+        android:textColor="@color/black"
+        android:textSize="24dp"
+        android:textStyle="bold" />
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:text="Makes"
+            android:textColor="@color/black"
+            android:textSize="14dp" />
+
+        <TextView
+            android:id="@+id/selectedMakes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/filterMakes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="16dp"
+            android:src="@drawable/ic_baseline_filter_24" />
+    </LinearLayout>
+
+
+    <include layout="@layout/separator_horizontal" />
 
     <com.google.android.material.switchmaterial.SwitchMaterial
         android:id="@+id/showFavorites"
@@ -18,16 +55,7 @@
         android:text="@string/show_favorites"
         android:trackTint="@color/green" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/filterMakes"
-        style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Filter makes"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        app:cornerRadius="8dp" />
+    <include layout="@layout/separator_horizontal" />
 
     <LinearLayout
         android:layout_width="match_parent"

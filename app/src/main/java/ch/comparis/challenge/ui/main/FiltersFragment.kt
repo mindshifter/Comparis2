@@ -47,11 +47,12 @@ class FiltersFragment : BottomSheetDialogFragment() {
             showFavorites.setOnCheckedChangeListener { _, isChecked ->
                 filtersViewModel.filterFavorites(isChecked)
             }
+            showSelectedMakes()
         }
     }
 
     private fun showFilterByMakesDialog() {
-        val makesMap = filtersViewModel.getMakes()
+        val makesMap = filtersViewModel.getAllMakes()
         val makesNamesArray = makesMap.map { it.name }.toTypedArray()
         val checkedMakesArray = makesMap.map { it.isSelected }.toBooleanArray()
         MaterialAlertDialogBuilder(requireContext())
@@ -61,13 +62,8 @@ class FiltersFragment : BottomSheetDialogFragment() {
             }
             .setPositiveButton("OK") { dialog, _ ->
                 binding?.apply {
-                    selectedMakes.text = "Selected Makes...\n"
-                    checkedMakesArray.forEachIndexed { index, isChecked ->
-                        if (isChecked) {
-                            selectedMakes.text = selectedMakes.text.toString() + makesMap[index].name + "\n"
-                        }
-                    }
                     filtersViewModel.updateMakesFilter(makesMap.filter { it.isSelected }.toMutableList())
+                    showSelectedMakes()
                 }
                 dialog.dismiss()
             }
@@ -75,6 +71,15 @@ class FiltersFragment : BottomSheetDialogFragment() {
                 dialog.dismiss()
             }
             .create().show()
+    }
+
+    private fun showSelectedMakes() {
+        binding?.apply {
+            selectedMakes.text = ""
+            selectedMakes.text = filtersViewModel.getFilterSelectedMakes().joinToString {
+                it.name
+            }
+        }
     }
 
     companion object {

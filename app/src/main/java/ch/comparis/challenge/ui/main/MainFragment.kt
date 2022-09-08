@@ -17,7 +17,7 @@ class MainFragment : Fragment() {
     private val carsViewModel: CarsViewModel by sharedViewModel()
     private val filtersViewModel: FiltersViewModel by sharedViewModel()
     private var binding: FragmentMainBinding? = null
-    private val carsAdapter = CarsAdapter{
+    private val carsAdapter = CarsAdapter {
         when {
             it.isFavorite -> carsViewModel.addCarToFavorite(it)
             else -> carsViewModel.removeCarFromFavorite(it)

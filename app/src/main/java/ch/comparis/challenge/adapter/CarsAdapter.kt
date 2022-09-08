@@ -23,9 +23,10 @@ class CarsAdapter(private val carFavoriteListener: (Car) -> Unit) : RecyclerView
         with(holder) {
             binding.isFavoriteButton.setImageResource(if (car.isFavorite) R.drawable.ic_baseline_favorite_24 else R.drawable.ic_baseline_favorite_border_24)
             binding.carMake.text = car.make.name
-            binding.carMileage.text = car.mileage.toString()
+            binding.carMileage.text = "${car.mileage} km"
             binding.isFavoriteButton.setOnClickListener {
                 car.isFavorite = !car.isFavorite
+                notifyDataSetChanged()
                 carFavoriteListener.invoke(car)
             }
             Glide.with(binding.carAvatar)
@@ -37,10 +38,8 @@ class CarsAdapter(private val carFavoriteListener: (Car) -> Unit) : RecyclerView
 
     override fun getItemCount(): Int = cars.size
 
-    fun updateCars(it: List<Car>) {
-        it?.let {
-            cars = it
-            notifyDataSetChanged()
-        }
+    fun updateCars(newCars: List<Car>) {
+        cars = newCars
+        notifyDataSetChanged()
     }
 }
