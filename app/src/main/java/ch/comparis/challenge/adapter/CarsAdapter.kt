@@ -8,7 +8,7 @@ import ch.comparis.challenge.databinding.ItemCarBinding
 import ch.comparis.challenge.model.Car
 import com.bumptech.glide.Glide
 
-class CarsAdapter : RecyclerView.Adapter<CarsAdapter.CarViewHolder>() {
+class CarsAdapter(private val carFavoriteListener: (Car) -> Unit) : RecyclerView.Adapter<CarsAdapter.CarViewHolder>() {
     private var cars: List<Car> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
@@ -26,10 +26,10 @@ class CarsAdapter : RecyclerView.Adapter<CarsAdapter.CarViewHolder>() {
             binding.carMileage.text = car.mileage.toString()
             binding.isFavoriteButton.setOnClickListener {
                 car.isFavorite = !car.isFavorite
+                carFavoriteListener.invoke(car)
             }
             Glide.with(binding.carAvatar)
                 .load(car.avatar)
-                .circleCrop()
                 .placeholder(R.drawable.ic_baseline_directions_car_24)
                 .into(binding.carAvatar)
         }

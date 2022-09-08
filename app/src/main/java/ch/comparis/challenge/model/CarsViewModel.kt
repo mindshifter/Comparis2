@@ -27,4 +27,15 @@ class CarsViewModel(private val carsRepository: Repository) : ViewModel() {
             fetchCars()
         }
     }
+    fun addCarToFavorite(car: Car) {
+        carsRepository.addCarToFavorite(car.make.name)
+        fetchCars()
+    }
+
+    fun removeCarFromFavorite(car: Car) {
+        carsRepository.removeCarFromFavorite(car.make.name)
+        fetchCars()
+    }
+
+
 }

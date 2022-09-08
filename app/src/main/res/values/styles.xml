@@ -2,10 +2,12 @@
 <resources>
 
     <style name="Regular">
+        <item name="android:fontFamily">@font/roboto_regular</item>
         <item name="android:textColor">@color/textColor</item>
     </style>
 
     <style name="RegularBold">
+        <item name="android:fontFamily">@font/roboto_bold</item>
         <item name="android:textColor">@color/textColor</item>
     </style>
 
