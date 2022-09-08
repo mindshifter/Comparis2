@@ -15,6 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class MainFragment : Fragment() {
     private val viewModel: CarsViewModel by sharedViewModel()
     private var binding: FragmentMainBinding? = null
+    private val carsAdapter = CarsAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,10 +43,10 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
         viewModel.cars.observe(this) {
             Toast.makeText(requireContext(), "Count ${it[0].make}", Toast.LENGTH_SHORT).show()
+            carsAdapter.updateCars(it)
         }
     }
     private fun setupCarsRecycleView() {
-        val carsAdapter = CarsAdapter()
         binding!!.carsRecycleView.let { recyclerView ->
                 with(recyclerView) {
                     layoutManager = LinearLayoutManager(requireContext())

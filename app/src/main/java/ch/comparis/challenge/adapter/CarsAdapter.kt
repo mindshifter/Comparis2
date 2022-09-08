@@ -6,9 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ch.comparis.challenge.R
 import ch.comparis.challenge.databinding.ItemCarBinding
 import ch.comparis.challenge.model.Car
+import com.bumptech.glide.Glide
 
 class CarsAdapter : RecyclerView.Adapter<CarsAdapter.CarViewHolder>() {
-    private var cars: MutableList<Car> = mutableListOf()
+    private var cars: List<Car> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CarViewHolder {
         val binding = ItemCarBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,12 +27,17 @@ class CarsAdapter : RecyclerView.Adapter<CarsAdapter.CarViewHolder>() {
             binding.isFavoriteButton.setOnClickListener {
                 car.isFavorite = !car.isFavorite
             }
+            Glide.with(binding.carAvatar)
+                .load(car.avatar)
+                .circleCrop()
+                .placeholder(R.drawable.ic_baseline_directions_car_24)
+                .into(binding.carAvatar)
         }
     }
 
     override fun getItemCount(): Int = cars.size
 
-    fun updateCars(it: MutableList<Car>?) {
+    fun updateCars(it: List<Car>) {
         it?.let {
             cars = it
             notifyDataSetChanged()
