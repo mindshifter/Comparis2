@@ -1,5 +1,6 @@
 package ch.comparis.challenge.model
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,19 +13,24 @@ class CarsViewModel(private val carsRepository: Repository) : ViewModel() {
 
     init {
         fetchCars()
+        Log.d("ViewModel", "CarsViewModel Init")
     }
 
     private fun fetchCars() {
         _cars.value = carsRepository.fetchCars()
     }
 
-    fun filterByMakes(filter: CarsFilter) {
-        if (filter.makes.isNotEmpty()) {
-            _cars.value = carsRepository.filterByMakes(filter.makes)
-        } else if (filter.showFavorite) {
-            _cars.value = carsRepository.filterByFavorite()
+    fun filterCars(filter: CarsFilter) {
+        if (filter.showFavorite) {
+            _cars.value = _cars.value?.filter { it.isFavorite }
         } else {
             fetchCars()
+        }
+        if (filter.makes.isNotEmpty()) {
+            _cars.value = _cars.value?.filter { it.make.isSelected }
+        }
+        if (filter.mileageFrom != 0) {
+            _cars.value?.filter { it.mileage in filter.mileageFrom..filter.mileageTo }
         }
     }
 
