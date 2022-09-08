@@ -21,7 +21,7 @@ class CarsAdapter : RecyclerView.Adapter<CarsAdapter.CarViewHolder>() {
         val car = cars[position]
         with(holder) {
             binding.isFavoriteButton.setImageResource(if (car.isFavorite) R.drawable.ic_baseline_favorite_24 else R.drawable.ic_baseline_favorite_border_24)
-            binding.carMake.text = car.make
+            binding.carMake.text = car.make.name
             binding.carMileage.text = car.mileage.toString()
             binding.isFavoriteButton.setOnClickListener {
                 car.isFavorite = !car.isFavorite

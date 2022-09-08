@@ -34,14 +34,12 @@ class MainFragment : Fragment() {
     }
 
     private fun openFiltersFragment() {
-        FiltersFragment.newInstance().show(requireActivity().supportFragmentManager, FiltersFragment.TAG)
+        val filtersBottomSheetDialogFragment = FiltersFragment.newInstance()
+        filtersBottomSheetDialogFragment.show(requireActivity().supportFragmentManager, FiltersFragment.TAG)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.count.observe(this) {
-            Toast.makeText(requireContext(), "Count $it", Toast.LENGTH_SHORT).show()
-        }
         viewModel.cars.observe(this) {
             Toast.makeText(requireContext(), "Count ${it[0].make}", Toast.LENGTH_SHORT).show()
         }

@@ -9,11 +9,8 @@ class MainApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin {
-            // Koin Android logger
             androidLogger()
-            //inject Android context
             androidContext(this@MainApplication)
-            // use modules
             modules(listOf(repositoryModules, viewModelModules))
         }
     }

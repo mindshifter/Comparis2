@@ -1,6 +1,7 @@
 package ch.comparis.challenge
 
 import ch.comparis.challenge.model.CarsViewModel
+import ch.comparis.challenge.model.FiltersViewModel
 import ch.comparis.challenge.repo.CarsRepository
 import ch.comparis.challenge.repo.LocalCarsRepository
 import ch.comparis.challenge.repo.NetworkCarsRepository
@@ -16,6 +17,7 @@ val repositoryModules = module {
 }
 val viewModelModules = module {
     viewModel { CarsViewModel(get(named("localRepo"))) }
+    viewModel { FiltersViewModel(get(named("localRepo"))) }
 }
 
 
