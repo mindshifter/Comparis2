@@ -10,10 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import ch.comparis.challenge.adapter.CarsAdapter
 import ch.comparis.challenge.databinding.FragmentMainBinding
 import ch.comparis.challenge.model.CarsViewModel
+import ch.comparis.challenge.model.FiltersViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MainFragment : Fragment() {
-    private val viewModel: CarsViewModel by sharedViewModel()
+    private val carsViewModel: CarsViewModel by sharedViewModel()
+    private val filtersViewModel: FiltersViewModel by sharedViewModel()
     private var binding: FragmentMainBinding? = null
     private val carsAdapter = CarsAdapter()
 
@@ -41,19 +43,22 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.cars.observe(this) {
-            Toast.makeText(requireContext(), "Count ${it[0].make}", Toast.LENGTH_SHORT).show()
+        carsViewModel.cars.observe(this) {
             carsAdapter.updateCars(it)
         }
+        filtersViewModel.filter.observe(this) {
+            carsViewModel.filterByMakes(it)
+        }
     }
+
     private fun setupCarsRecycleView() {
-        binding!!.carsRecycleView.let { recyclerView ->
-                with(recyclerView) {
-                    layoutManager = LinearLayoutManager(requireContext())
-                    adapter = carsAdapter
-                }
+        binding?.apply {
+            with(carsRecycleView) {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = carsAdapter
             }
         }
+    }
 
 
     override fun onDestroy() {

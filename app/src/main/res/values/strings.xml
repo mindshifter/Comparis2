@@ -2,4 +2,6 @@
     <string name="app_name">Comparis2</string>
     <string name="filter">Filter</string>
     <string name="show_favorites">Show Favorites</string>
+    <string name="save">Save</string>
+    <string name="reset">Reset</string>
 </resources>

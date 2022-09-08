@@ -7,7 +7,7 @@ import ch.comparis.challenge.repo.Repository
 
 class FiltersViewModel(private val carsRepository: Repository) : ViewModel() {
 
-    val carFilter = CarsFilter()
+    private var carFilter = CarsFilter()
     private val _filter = MutableLiveData<CarsFilter>()
     val filter: LiveData<CarsFilter> = _filter
 
@@ -16,23 +16,27 @@ class FiltersViewModel(private val carsRepository: Repository) : ViewModel() {
     }
 
     private fun initFilter() {
-        carFilter.makes.addAll(carsRepository.fetchCars().map { MakeForFilter(it.make) })
         _filter.value = carFilter
     }
 
-    fun getMakes(): MutableList<MakeForFilter> {
-        return carFilter.makes
+    fun getMakes(): MutableList<Make> {
+        return carsRepository.fetchCars().map { it.make }.toMutableList()
     }
 
-    fun updateMakesFilter(checkedMakesArray: BooleanArray) {
-        carFilter.makes.forEachIndexed { index, make ->
-            make.isSelected = checkedMakesArray[index]
-        }
-        _filter.value = carFilter
+    fun updateMakesFilter(selectedMakes: MutableList<Make>) {
+        carFilter.makes = selectedMakes
     }
 
     fun filterFavorites(showFavorite: Boolean) {
         carFilter.showFavorite = showFavorite
+    }
+
+    fun resetFilter() {
+        carFilter = CarsFilter()
+        updateFilter()
+    }
+
+    fun updateFilter() {
         _filter.value = carFilter
     }
 }

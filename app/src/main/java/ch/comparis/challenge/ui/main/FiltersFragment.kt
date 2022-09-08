@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import ch.comparis.challenge.databinding.FiltersBottomSheetBinding
-import ch.comparis.challenge.model.CarsViewModel
 import ch.comparis.challenge.model.FiltersViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -22,13 +21,29 @@ class FiltersFragment : BottomSheetDialogFragment() {
         return fragmentBinding.root
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        filtersViewModel.filter.observe(this) {
+            binding?.apply {
+                showFavorites.isChecked = it.showFavorite
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding?.apply {
-            firstButton.setOnClickListener {
+            saveFilter.setOnClickListener {
+                filtersViewModel.updateFilter()
+                this@FiltersFragment.dismiss()
+            }
+            filterMakes.setOnClickListener {
                 showFilterByMakesDialog()
             }
-            showFavorites.isChecked = filtersViewModel.carFilter.showFavorite
+            resetFilter.setOnClickListener {
+                filtersViewModel.resetFilter()
+                this@FiltersFragment.dismiss()
+            }
             showFavorites.setOnCheckedChangeListener { _, isChecked ->
                 filtersViewModel.filterFavorites(isChecked)
             }
@@ -37,22 +52,22 @@ class FiltersFragment : BottomSheetDialogFragment() {
 
     private fun showFilterByMakesDialog() {
         val makesMap = filtersViewModel.getMakes()
-        val makesNamesArray = makesMap.map { it.make.name }.toTypedArray()
+        val makesNamesArray = makesMap.map { it.name }.toTypedArray()
         val checkedMakesArray = makesMap.map { it.isSelected }.toBooleanArray()
         MaterialAlertDialogBuilder(requireContext())
             .setTitle("Filter Makes")
             .setMultiChoiceItems(makesNamesArray, checkedMakesArray) { _, which, isChecked ->
-                checkedMakesArray[which] = isChecked
+                makesMap[which].isSelected = isChecked
             }
             .setPositiveButton("OK") { dialog, _ ->
                 binding?.apply {
-                    selectedMakes.text = "Your preferred colors..... \n"
+                    selectedMakes.text = "Selected Makes...\n"
                     checkedMakesArray.forEachIndexed { index, isChecked ->
                         if (isChecked) {
-                            selectedMakes.text = selectedMakes.text.toString() + makesNamesArray[index] + "\n"
+                            selectedMakes.text = selectedMakes.text.toString() + makesMap[index].name + "\n"
                         }
                     }
-                    filtersViewModel.updateMakesFilter(checkedMakesArray)
+                    filtersViewModel.updateMakesFilter(makesMap.filter { it.isSelected }.toMutableList())
                 }
                 dialog.dismiss()
             }

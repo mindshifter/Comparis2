@@ -7,11 +7,8 @@ import ch.comparis.challenge.repo.Repository
 
 class CarsViewModel(private val carsRepository: Repository) : ViewModel() {
 
-    private val _cars = MutableLiveData<List<Car>>()
-    val cars: LiveData<List<Car>> = _cars
-
-    private val _filter = MutableLiveData<CarsFilter>()
-    val filter: LiveData<CarsFilter> = _filter
+    private var _cars = MutableLiveData<List<Car>>()
+    var cars: LiveData<List<Car>> = _cars
 
     init {
         fetchCars()
@@ -21,7 +18,13 @@ class CarsViewModel(private val carsRepository: Repository) : ViewModel() {
         _cars.value = carsRepository.fetchCars()
     }
 
-    fun filterByMileage(filter: CarsFilter) {
-        _cars.value = carsRepository.filterByMileage(filter.mileageFrom, filter.mileageTo)
+    fun filterByMakes(filter: CarsFilter) {
+        if (filter.makes.isNotEmpty()) {
+            _cars.value = carsRepository.filterByMakes(filter.makes)
+        } else if (filter.showFavorite) {
+            _cars.value = carsRepository.filterByFavorite()
+        } else {
+            fetchCars()
+        }
     }
 }
