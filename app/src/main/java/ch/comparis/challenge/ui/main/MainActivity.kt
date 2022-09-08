@@ -1,8 +1,8 @@
-package ch.comparis.challenge
+package ch.comparis.challenge.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import ch.comparis.challenge.ui.main.MainFragment
+import ch.comparis.challenge.R
 
 class MainActivity : AppCompatActivity() {
 

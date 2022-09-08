@@ -23,24 +23,11 @@ class FiltersViewModel(private val carsRepository: Repository) : ViewModel() {
         return carsRepository.fetchCars().map { it.make }.toMutableList()
     }
 
-    fun getFilterSelectedMakes(): MutableList<Make> {
-        return carFilter.makes
-    }
-
-    fun updateMakesFilter(selectedMakes: MutableList<Make>) {
-        carFilter.makes = selectedMakes
-    }
-
-    fun filterFavorites(showFavorite: Boolean) {
-        carFilter.showFavorite = showFavorite
-    }
-
     fun resetFilter() {
-        carFilter = CarsFilter()
-        updateFilter()
+        updateFilter(CarsFilter())
     }
 
-    fun updateFilter() {
-        _filter.value = carFilter
+    fun updateFilter(carsFilter: CarsFilter) {
+        _filter.value = carsFilter
     }
 }
