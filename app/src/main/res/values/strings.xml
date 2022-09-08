@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Comparis2</string>
+    <string name="app_name">Car Market</string>
     <string name="filter">Filter</string>
     <string name="show_favorites">Show Favorites</string>
     <string name="save">Save</string>
