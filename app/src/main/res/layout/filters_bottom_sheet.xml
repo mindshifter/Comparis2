@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp"
         android:text="@string/show_favorites"
-        android:trackTint="@color/purple_200" />
+        android:trackTint="@color/green" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/filterMakes"
