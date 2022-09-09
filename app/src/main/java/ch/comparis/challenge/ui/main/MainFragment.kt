@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import ch.comparis.challenge.adapter.CarsAdapter
 import ch.comparis.challenge.databinding.FragmentMainBinding
@@ -15,7 +16,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class MainFragment : Fragment() {
     private val carsViewModel: CarsViewModel by sharedViewModel()
     private val filtersViewModel: FiltersViewModel by sharedViewModel()
-    private var binding: FragmentMainBinding? = null
+    private lateinit var binding: FragmentMainBinding
     private val carsAdapter = CarsAdapter {
         when {
             it.isFavorite -> carsViewModel.addCarToFavorite(it)
@@ -27,15 +28,14 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val fragmentBinding = FragmentMainBinding.inflate(layoutInflater, container, false)
-        binding = fragmentBinding
-        setupCarsRecycleView()
-        return fragmentBinding.root
+        binding = FragmentMainBinding.inflate(layoutInflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding?.apply {
+        setupCarsRecycleView()
+        binding.apply {
             filterButton.setOnClickListener { openFiltersFragment() }
         }
     }
@@ -48,6 +48,8 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         carsViewModel.cars.observe(this) {
+            binding.emptyStateTextView.isVisible = it.isEmpty()
+            binding.carsRecycleView.isVisible = it.isNotEmpty()
             carsAdapter.updateCars(it)
         }
         filtersViewModel.filter.observe(this) {
@@ -56,18 +58,12 @@ class MainFragment : Fragment() {
     }
 
     private fun setupCarsRecycleView() {
-        binding?.apply {
+        with(binding) {
             with(carsRecycleView) {
                 layoutManager = LinearLayoutManager(requireContext())
                 adapter = carsAdapter
             }
         }
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        binding = null
     }
 
     companion object {

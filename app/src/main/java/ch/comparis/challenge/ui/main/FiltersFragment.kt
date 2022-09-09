@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.DialogFragment
 import ch.comparis.challenge.R
 import ch.comparis.challenge.databinding.FiltersBottomSheetBinding
@@ -34,46 +35,44 @@ class FiltersFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        filtersViewModel.filter.observe(viewLifecycleOwner) {
-            showFilters(it)
-        }
+        filtersViewModel.filter.observe(viewLifecycleOwner, this@FiltersFragment::showFilters)
         with(binding) {
-            saveFilterButton.setOnClickListener {
-                saveFilter()
-                this@FiltersFragment.dismiss()
-            }
-            filterMakes.setOnClickListener {
-                showFilterByMakesDialog()
-            }
-            resetFilterButton.setOnClickListener {
-                filtersViewModel.resetFilter()
-                this@FiltersFragment.dismiss()
-            }
+            saveFilterButton.setOnClickListener { saveFilter() }
+            filterMakes.setOnClickListener { showFilterByMakesDialog() }
+            resetFilterButton.setOnClickListener { showConfirmResetFilterDialog() }
+            clearMakes.setOnClickListener { clearMakesFilter() }
         }
+    }
+
+    private fun clearMakesFilter() {
+        showSelectedMakes(mutableListOf())
+    }
+
+    private fun showConfirmResetFilterDialog() {
+        MaterialAlertDialogBuilder(requireActivity())
+            .setTitle("Reset Filter")
+            .setMessage("Are you sure you want to reset all the search criteria?")
+            .setPositiveButton("Yes") { dialog, _ ->
+                filtersViewModel.resetFilter()
+                dialog.dismiss()
+            }
+            .setNegativeButton("No") { dialog, _ -> dialog.dismiss() }
+            .create().show()
     }
 
     private fun showFilters(carsFilter: CarsFilter) {
         binding.showFavorites.isChecked = carsFilter.showFavorite
         showMileageFrom(carsFilter.mileageFrom)
         showMileageTo(carsFilter.mileageTo)
-        showSelectedMakes(carsFilter.makes)
+        showSelectedMakes(carsFilter.selectedMakes)
     }
 
-
     private fun showMileageFrom(mileageFrom: Int) {
-        if (mileageFrom != MIN_MILEAGE) {
-            binding.mileageFrom.editText?.setText(mileageFrom.toString())
-        } else {
-            binding.mileageFrom.editText?.setText("")
-        }
+        binding.mileageFrom.editText?.setText(if (mileageFrom != MIN_MILEAGE) mileageFrom.toString() else "")
     }
 
     private fun showMileageTo(mileageTo: Int) {
-        if (mileageTo != MAX_MILEAGE) {
-            binding.mileageTo.editText?.setText(mileageTo.toString())
-        } else {
-            binding.mileageTo.editText?.setText("")
-        }
+        binding.mileageTo.editText?.setText(if (mileageTo != MAX_MILEAGE) mileageTo.toString() else "")
     }
 
     private fun saveFilter() {
@@ -82,9 +81,10 @@ class FiltersFragment : BottomSheetDialogFragment() {
             carsFilter.showFavorite = showFavorites.isChecked
             carsFilter.mileageFrom = getMileageFrom()
             carsFilter.mileageTo = getMileageTo()
-            carsFilter.makes = selectedMakes
+            carsFilter.selectedMakes = selectedMakes
             filtersViewModel.updateFilter(carsFilter)
         }
+        this@FiltersFragment.dismiss()
     }
 
     private fun getMileageFrom(): Int {
@@ -98,16 +98,18 @@ class FiltersFragment : BottomSheetDialogFragment() {
     }
 
     private fun showFilterByMakesDialog() {
-        val makesMap = filtersViewModel.getAllMakes()
-        val makesNamesArray = makesMap.map { it.name }.toTypedArray()
-        val checkedMakesArray = makesMap.map { it.isSelected }.toBooleanArray()
+        val allMakes = filtersViewModel.getAllMakes()
+        val makesNamesArray = allMakes.map { it.name }.toTypedArray()
+        val checkedMakesArray = allMakes.map { it.isSelected }.toBooleanArray()
         MaterialAlertDialogBuilder(requireContext())
-            .setTitle("Filter Makes")
+            .setTitle(getString(R.string.filter_makes))
             .setMultiChoiceItems(makesNamesArray, checkedMakesArray) { _, which, isChecked ->
-                makesMap[which].isSelected = isChecked
+                allMakes[which].isSelected = isChecked
             }
             .setPositiveButton("OK") { dialog, _ ->
-                showSelectedMakes(makesMap.filter { it.isSelected }.toMutableList())
+                selectedMakes.clear()
+                selectedMakes.addAll(allMakes.filter { it.isSelected })
+                showSelectedMakes(selectedMakes)
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
@@ -119,6 +121,8 @@ class FiltersFragment : BottomSheetDialogFragment() {
     private fun showSelectedMakes(makes: MutableList<Make>) {
         selectedMakes = makes
         with(binding) {
+            clearMakes.isVisible = selectedMakes.any { it.isSelected }
+            selectMakesIcon.isVisible = selectedMakes.none { it.isSelected }
             selectedMakesTextView.text = ""
             selectedMakesTextView.text = selectedMakes.joinToString { it.name }
         }
