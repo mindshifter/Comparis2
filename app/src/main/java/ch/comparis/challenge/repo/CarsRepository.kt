@@ -21,18 +21,6 @@ class CarsRepository : Repository {
         return cars
     }
 
-    override fun filterByFavorite(): List<Car> {
-        return cars.filter { it.isFavorite }
-    }
-
-    override fun filterByMileage(from: Int, to: Int): List<Car> {
-        return cars.filter { it.mileage in from..to }
-    }
-
-    override fun filterByMakes(makes: List<Make>): List<Car> {
-        return cars.filter { it.make.isSelected }
-    }
-
     override fun addCarToFavorite(makeName: String) {
         cars.find { it.make.name == makeName }?.isFavorite = true
     }

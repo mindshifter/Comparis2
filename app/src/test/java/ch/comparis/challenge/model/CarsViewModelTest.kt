@@ -2,16 +2,13 @@ package ch.comparis.challenge.model
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import ch.comparis.challenge.repo.CarsRepository
-import com.muume.cabinetto.TestApplication
+import ch.comparis.challenge.TestApplication
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import org.hamcrest.CoreMatchers
 import org.hamcrest.CoreMatchers.notNullValue
-import org.hamcrest.MatcherAssert
 import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.IsNull
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

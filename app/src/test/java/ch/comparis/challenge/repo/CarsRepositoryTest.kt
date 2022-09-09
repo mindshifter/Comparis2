@@ -1,6 +1,6 @@
 package ch.comparis.challenge.repo
 
-import com.muume.cabinetto.TestApplication
+import ch.comparis.challenge.TestApplication
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.koin.test.KoinTest

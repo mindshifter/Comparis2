@@ -1,7 +1,6 @@
-package com.muume.cabinetto
+package ch.comparis.challenge
 
 import android.app.Application
-import ch.comparis.challenge.testRepositoryModules
 import org.junit.Before
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger

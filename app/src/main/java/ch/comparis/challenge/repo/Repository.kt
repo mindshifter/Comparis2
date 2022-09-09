@@ -5,9 +5,6 @@ import ch.comparis.challenge.model.Make
 
 interface Repository {
     fun fetchCars(): List<Car>
-    fun filterByFavorite(): List<Car>
-    fun filterByMileage(from: Int, to: Int): List<Car>
-    fun filterByMakes(makes: List<Make>): List<Car>
     fun addCarToFavorite(makeName: String)
     fun removeCarFromFavorite(makeName: String)
 }
