@@ -24,7 +24,8 @@ class FiltersViewModel(private val carsRepository: Repository) : ViewModel() {
     }
 
     fun resetFilter() {
-        updateFilter(CarsFilter())
+        carFilter = CarsFilter()
+        initFilter()
     }
 
     fun updateFilter(carsFilter: CarsFilter) {

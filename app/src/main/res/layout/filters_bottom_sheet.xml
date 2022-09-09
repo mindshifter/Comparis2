@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:gravity="bottom"
     android:orientation="vertical">
 
     <TextView
@@ -25,8 +28,10 @@
     <include layout="@layout/separator_horizontal" />
 
     <LinearLayout
+        android:id="@+id/filterMakes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
         android:orientation="horizontal">
 
         <TextView
@@ -34,23 +39,33 @@
             android:layout_height="wrap_content"
             android:padding="16dp"
             android:text="Makes"
-            android:textColor="@color/black"
-            android:textSize="14dp" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/selectedMakesTextView"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <ImageButton
-            android:id="@+id/filterMakes"
+        <ImageView
+            android:id="@+id/selectMakesIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginEnd="16dp"
+            android:padding="16dp"
+            android:src="@drawable/ic_baseline_arrow_drop_down_24" />
+
+        <ImageButton
+            android:id="@+id/clearMakes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="16dp"
-            android:src="@drawable/ic_baseline_filter_24" />
+            android:src="@drawable/ic_baseline_cancel_24"
+            android:visibility="gone"
+            tools:visibility="visible" />
     </LinearLayout>
 
     <include layout="@layout/separator_horizontal" />
@@ -65,8 +80,7 @@
             android:layout_height="match_parent"
             android:padding="16dp"
             android:text="Mileage (in km)"
-            android:textColor="@color/black"
-            android:textSize="14dp" />
+            android:textColor="@color/black" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -87,7 +101,6 @@
                 app:hintEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -106,7 +119,6 @@
                 app:hintEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
@@ -114,8 +126,6 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
     </LinearLayout>
-
-    <include layout="@layout/separator_horizontal" />
 
     <LinearLayout
         android:layout_width="match_parent"
