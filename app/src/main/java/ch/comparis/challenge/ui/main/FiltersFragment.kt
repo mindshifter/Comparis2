@@ -12,14 +12,14 @@ import ch.comparis.challenge.model.CarsFilter
 import ch.comparis.challenge.model.CarsFilter.Companion.MAX_MILEAGE
 import ch.comparis.challenge.model.CarsFilter.Companion.MIN_MILEAGE
 import ch.comparis.challenge.model.FiltersViewModel
-import ch.comparis.challenge.model.Make
+import ch.comparis.challenge.model.SelectedMake
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class FiltersFragment : BottomSheetDialogFragment() {
 
-    private lateinit var selectedMakes: MutableList<Make>
+    private var currentSelectedMakes: MutableList<SelectedMake> = mutableListOf()
     private val filtersViewModel: FiltersViewModel by sharedViewModel()
     private lateinit var binding: FiltersBottomSheetBinding
 
@@ -35,7 +35,7 @@ class FiltersFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        filtersViewModel.filter.observe(viewLifecycleOwner, this@FiltersFragment::showFilters)
+        filtersViewModel.filter.observe(requireActivity(), this@FiltersFragment::showFilters)
         with(binding) {
             saveFilterButton.setOnClickListener { saveFilter() }
             filterMakes.setOnClickListener { showFilterByMakesDialog() }
@@ -81,7 +81,7 @@ class FiltersFragment : BottomSheetDialogFragment() {
             carsFilter.showFavorite = showFavorites.isChecked
             carsFilter.mileageFrom = getMileageFrom()
             carsFilter.mileageTo = getMileageTo()
-            carsFilter.selectedMakes = selectedMakes
+            carsFilter.selectedMakes = currentSelectedMakes
             filtersViewModel.updateFilter(carsFilter)
         }
         this@FiltersFragment.dismiss()
@@ -98,8 +98,9 @@ class FiltersFragment : BottomSheetDialogFragment() {
     }
 
     private fun showFilterByMakesDialog() {
-        val allMakes = filtersViewModel.getAllMakes()
-        val makesNamesArray = allMakes.map { it.name }.toTypedArray()
+        var allMakes = filtersViewModel.getAvailableMakes()
+        allMakes = listOf(currentSelectedMakes + allMakes).flatten().distinctBy { it.make.id }.sortedBy { it.make.id }
+        val makesNamesArray = allMakes.map { it.make.name }.toTypedArray()
         val checkedMakesArray = allMakes.map { it.isSelected }.toBooleanArray()
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(getString(R.string.filter_makes))
@@ -107,24 +108,21 @@ class FiltersFragment : BottomSheetDialogFragment() {
                 allMakes[which].isSelected = isChecked
             }
             .setPositiveButton("OK") { dialog, _ ->
-                selectedMakes.clear()
-                selectedMakes.addAll(allMakes.filter { it.isSelected })
-                showSelectedMakes(selectedMakes)
+                showSelectedMakes(allMakes.filter { it.isSelected }.toMutableList())
                 dialog.dismiss()
             }
             .setNegativeButton("Cancel") { dialog, _ ->
                 dialog.dismiss()
-            }
-            .create().show()
+            }.create().show()
     }
 
-    private fun showSelectedMakes(makes: MutableList<Make>) {
-        selectedMakes = makes
+    private fun showSelectedMakes(makes: MutableList<SelectedMake>) {
+        currentSelectedMakes = makes
         with(binding) {
-            clearMakes.isVisible = selectedMakes.any { it.isSelected }
-            selectMakesIcon.isVisible = selectedMakes.none { it.isSelected }
+            clearMakes.isVisible = currentSelectedMakes.any { it.isSelected }
+            selectMakesIcon.isVisible = currentSelectedMakes.none { it.isSelected }
             selectedMakesTextView.text = ""
-            selectedMakesTextView.text = selectedMakes.joinToString { it.name }
+            selectedMakesTextView.text = currentSelectedMakes.joinToString { it.make.name }
         }
     }
 

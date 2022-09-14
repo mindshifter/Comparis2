@@ -1,6 +1,7 @@
 package ch.comparis.challenge.repo
 
 import ch.comparis.challenge.model.Car
+import ch.comparis.challenge.model.CarsFilter
 import ch.comparis.challenge.model.Make
 
 class CarsRepository : Repository {
@@ -19,6 +20,18 @@ class CarsRepository : Repository {
 
     override fun fetchCars(): List<Car> {
         return cars
+    }
+
+    override fun filterCars(filter: CarsFilter): List<Car> {
+        var cacheCars = fetchCars()
+        if (filter.showFavorite) {
+            cacheCars = cacheCars.filter { it.isFavorite }
+        }
+        if (filter.selectedMakes.isNotEmpty()) {
+            cacheCars = filter.selectedMakes.flatMap { selectedMake -> cacheCars.filter { selectedMake.make.id == it.make.id } }
+        }
+        cacheCars = cacheCars.filter { it.mileage in filter.mileageFrom..filter.mileageTo }
+        return cacheCars
     }
 
     override fun addCarToFavorite(makeName: String) {

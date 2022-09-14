@@ -18,7 +18,9 @@ import org.koin.test.KoinTest
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.test.assertTrue
 
 @RunWith(RobolectricTestRunner::class)
 @Config(application = TestApplication::class)
@@ -40,35 +42,31 @@ internal class CarsViewModelTest : KoinTest {
     }
 
     @Test
-    fun `Check LiveData is non null` () {
+    fun `Check LiveData is non null`() {
         assertThat(carsViewModel.cars.value, notNullValue())
     }
 
     @Test
     fun addToFavoriteTest() {
-        val car = Car(Make(1,"Audi"),"https://tdrresearch.azureedge.net/photos/chrome/Expanded/White/2021AUC280001/2021AUC28000101.jpg", 18000)
+        val car = Car(Make(1, "Audi"), "https://tdrresearch.azureedge.net/photos/chrome/Expanded/White/2021AUC280001/2021AUC28000101.jpg", 18000)
         carsRepository.addCarToFavorite(car.make.name)
         assertNotNull(carsRepository.addCarToFavorite("Audi"))
     }
 
     @Test
-    fun `test if add to favorites`() {
+    fun `test cars filter by favorites`() {
         val filter = CarsFilter()
-        var cacheCars = carsRepository.fetchCars()
-        if (filter.showFavorite) {
-            cacheCars = cacheCars.filter { it.isFavorite }
-            assertThat(cacheCars, notNullValue())
+        filter.showFavorite = true
+        val filteredCars = carsRepository.filterCars(filter)
+        filteredCars.forEach {
+            assertEquals(true, it.isFavorite)
         }
     }
 
     @Test
     fun `test cars filter by make`() {
         val filter = CarsFilter()
-        var cacheCars = carsRepository.fetchCars()
-        if (filter.makes!!.isNotEmpty()) {
-            cacheCars = cacheCars.filter { it.make.isSelected }
-            assertNotNull(cacheCars)
-        }
+        assertNotNull(carsRepository.filterCars(filter))
     }
 
     @Test
@@ -84,5 +82,4 @@ internal class CarsViewModelTest : KoinTest {
     fun tearDown() {
         Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
     }
-
 }

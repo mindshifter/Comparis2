@@ -1,7 +1,7 @@
 package ch.comparis.challenge.model
 
 data class CarsFilter(
-    var selectedMakes: MutableList<Make> = mutableListOf(),
+    var selectedMakes: MutableList<SelectedMake> = mutableListOf(),
     var showFavorite: Boolean = false,
     var mileageFrom: Int = MIN_MILEAGE,
     var mileageTo: Int = MAX_MILEAGE

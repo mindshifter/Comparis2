@@ -9,6 +9,10 @@ data class Car(
 
 data class Make(
     val id: Long,
-    val name: String,
+    val name: String
+)
+
+data class SelectedMake(
+    val make: Make,
     var isSelected: Boolean = false
 )

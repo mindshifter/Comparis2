@@ -19,15 +19,7 @@ class CarsViewModel(private val carsRepository: Repository) : ViewModel() {
     }
 
     fun filterCars(filter: CarsFilter) {
-        var cacheCars = carsRepository.fetchCars()
-        if (filter.showFavorite) {
-            cacheCars = cacheCars.filter { it.isFavorite }
-        }
-        if (filter.selectedMakes.isNotEmpty()) {
-            cacheCars = filter.selectedMakes.flatMap { make -> cacheCars.filter { make.id == it.make.id } }
-        }
-        cacheCars = cacheCars.filter { it.mileage in filter.mileageFrom..filter.mileageTo }
-        _cars.value = cacheCars
+        _cars.value = carsRepository.filterCars(filter)
     }
 
     fun addCarToFavorite(car: Car) {

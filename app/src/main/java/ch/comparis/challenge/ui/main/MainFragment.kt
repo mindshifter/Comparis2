@@ -18,24 +18,24 @@ class MainFragment : Fragment() {
     private val filtersViewModel: FiltersViewModel by sharedViewModel()
     private lateinit var binding: FragmentMainBinding
     private val carsAdapter = CarsAdapter {
-        when {
-            it.isFavorite -> carsViewModel.addCarToFavorite(it)
-            else -> carsViewModel.removeCarFromFavorite(it)
+        when (it.isFavorite) {
+            true -> carsViewModel.addCarToFavorite(it)
+            false -> carsViewModel.removeCarFromFavorite(it)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         binding = FragmentMainBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setupCarsRecycleView()
-        binding.apply {
+        with(binding) {
+            with(carsRecycleView) {
+                layoutManager = LinearLayoutManager(requireContext())
+                adapter = carsAdapter
+            }
             filterButton.setOnClickListener { openFiltersFragment() }
         }
     }
@@ -47,22 +47,13 @@ class MainFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        carsViewModel.cars.observe(this) {
+        carsViewModel.cars.observe(requireActivity()) {
             binding.emptyStateTextView.isVisible = it.isEmpty()
             binding.carsRecycleView.isVisible = it.isNotEmpty()
             carsAdapter.updateCars(it)
         }
         filtersViewModel.filter.observe(this) {
             carsViewModel.filterCars(it)
-        }
-    }
-
-    private fun setupCarsRecycleView() {
-        with(binding) {
-            with(carsRecycleView) {
-                layoutManager = LinearLayoutManager(requireContext())
-                adapter = carsAdapter
-            }
         }
     }
 
